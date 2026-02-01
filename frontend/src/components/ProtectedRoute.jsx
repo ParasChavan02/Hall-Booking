@@ -1,0 +1,17 @@
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+
+export default function ProtectedRoute({ roles, children }) {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/login" />;
+  if (roles && !roles.includes(user.role)) {
+    // Redirect based on role
+    if (user.role === 'admin') {
+      return <Navigate to="/admin" />;
+    }
+    return <Navigate to="/my-bookings" />;
+  }
+
+  return children;
+}
